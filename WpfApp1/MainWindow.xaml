@@ -1,0 +1,129 @@
+﻿<Window x:Class="WpfApp1.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Личный бюджет" Height="550" Width="800"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Заголовок -->
+        <TextBlock Grid.Row="0" Text="Личный бюджет" FontSize="24" FontWeight="Bold" 
+                   HorizontalAlignment="Center" Margin="0,0,0,10"/>
+
+        <!-- Блок баланса -->
+        <Border Grid.Row="1" Background="LightGray" CornerRadius="10" Padding="10" Margin="0,0,0,10">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" HorizontalAlignment="Center">
+                    <TextBlock Text="Доходы" FontWeight="Bold" FontSize="14"/>
+                    <TextBlock x:Name="TxtTotalIncome" Text="0 руб" FontSize="20" Foreground="Green" FontWeight="Bold"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                    <TextBlock Text="Расходы" FontWeight="Bold" FontSize="14"/>
+                    <TextBlock x:Name="TxtTotalExpense" Text="0 руб" FontSize="20" Foreground="Red" FontWeight="Bold"/>
+                </StackPanel>
+                <StackPanel Grid.Column="2" HorizontalAlignment="Center">
+                    <TextBlock Text="Баланс" FontWeight="Bold" FontSize="14"/>
+                    <TextBlock x:Name="TxtBalance" Text="0 руб" FontSize="22" FontWeight="Bold"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Форма добавления транзакции -->
+        <Border Grid.Row="2" BorderBrush="LightGray" BorderThickness="1" CornerRadius="10" Padding="10" Margin="0,0,0,10" Background="#F5F5F5">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="5"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Ряд 1 -->
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Тип:" VerticalAlignment="Center" Margin="5"/>
+                <ComboBox x:Name="CmbType" Grid.Row="0" Grid.Column="1" Width="100" Margin="5" SelectedIndex="0">
+                    <ComboBoxItem Content="💰 Доход"/>
+                    <ComboBoxItem Content="💸 Расход"/>
+                </ComboBox>
+
+                <TextBlock Grid.Row="0" Grid.Column="2" Text="Сумма:" VerticalAlignment="Center" Margin="5"/>
+                <TextBox x:Name="TxtAmount" Grid.Row="0" Grid.Column="3" Width="120" Margin="5" ToolTip="Введите сумму"/>
+
+                <TextBlock Grid.Row="0" Grid.Column="4" Text="Дата:" VerticalAlignment="Center" Margin="5"/>
+                <DatePicker x:Name="DpDate" Grid.Row="0" Grid.Column="5" Width="120" Margin="5" SelectedDate="2024-01-01"/>
+
+                <Button x:Name="BtnAdd" Grid.Row="0" Grid.Column="6" Content="➕ Добавить" Background="#4CAF50" 
+                        Foreground="White" Padding="10,5" Margin="10,0,0,0" BorderThickness="0" 
+                        FontWeight="Bold" Click="BtnAdd_Click"/>
+
+                <!-- Ряд 2 -->
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Категория:" VerticalAlignment="Center" Margin="5"/>
+                <ComboBox x:Name="CmbCategory" Grid.Row="2" Grid.Column="1" Width="150" Margin="5" IsEditable="True">
+                    <ComboBoxItem Content="🏠 Зарплата"/>
+                    <ComboBoxItem Content="🍔 Еда"/>
+                    <ComboBoxItem Content="🚗 Транспорт"/>
+                    <ComboBoxItem Content="💊 Медицина"/>
+                    <ComboBoxItem Content="🧴 Уход"/>
+                    <ComboBoxItem Content="🛡️ Подушка безопасности"/>
+                    <ComboBoxItem Content="🏡 Квартплата"/>
+                    <ComboBoxItem Content="🎉 Развлечения"/>
+                    <ComboBoxItem Content="📱 Связь/Интернет"/>
+                    <ComboBoxItem Content="👕 Одежда"/>
+                    <ComboBoxItem Content="📚 Образование"/>
+                    <ComboBoxItem Content="🐶 Животные"/>
+                    <ComboBoxItem Content="🎁 Подарки"/>
+                    <ComboBoxItem Content="✈️ Путешествия"/>
+                    <ComboBoxItem Content="🛒 Прочее"/>
+                </ComboBox>
+
+                <TextBlock Grid.Row="2" Grid.Column="2" Text="Описание:" VerticalAlignment="Center" Margin="5"/>
+                <TextBox x:Name="TxtDescription" Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="3" Margin="5" 
+                         ToolTip="Дополнительное описание (необязательно)"/>
+            </Grid>
+        </Border>
+
+        <!-- Список транзакций -->
+        <DataGrid x:Name="DgTransactions" Grid.Row="3" AutoGenerateColumns="True" 
+                  Margin="0,0,0,5" SelectionMode="Single" SelectionChanged="DgTransactions_SelectionChanged"
+                  AlternatingRowBackground="#F9F9F9" GridLinesVisibility="Horizontal"/>
+
+        <!-- Кнопки управления и прогноз -->
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="BtnRefresh" Grid.Column="0" Content="🔄 Обновить" Margin="2" Padding="5" 
+                    Background="#2196F3" Foreground="White" BorderThickness="0" Click="BtnRefresh_Click"/>
+            <Button x:Name="BtnDelete" Grid.Column="1" Content="🗑️ Удалить" Margin="2" Padding="5" 
+                    Background="#F44336" Foreground="White" BorderThickness="0" Click="BtnDelete_Click"/>
+            <Button x:Name="BtnForecast" Grid.Column="2" Content="📈 Прогноз расходов" Margin="2" Padding="5" 
+                    Background="#9C27B0" Foreground="White" BorderThickness="0" Click="BtnForecast_Click"/>
+            <TextBlock x:Name="TxtForecast" Grid.Column="3" Grid.ColumnSpan="2" Text="📊 Прогноз: -" FontSize="13" 
+                       VerticalAlignment="Center" HorizontalAlignment="Center" FontWeight="Bold"/>
+        </Grid>
+    </Grid>
+</Window>
